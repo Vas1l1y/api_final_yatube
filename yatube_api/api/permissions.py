@@ -6,6 +6,6 @@ from rest_framework import status
 class IsAuthorOrReadOnlyPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if request.method == 'DELETE' or request.method == 'PATCH':
+        if request.method not in permissions.SAFE_METHODS:
             return obj.author == request.user
-        return Response(status=status.HTTP_403_FORBIDDEN)
+        return request.method in permissions.SAFE_METHODS
